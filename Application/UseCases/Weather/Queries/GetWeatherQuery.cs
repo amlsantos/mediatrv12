@@ -7,7 +7,7 @@ public record GetWeatherQuery : IRequest<Result<List<GetWeatherResponse>>>;
 
 public class GetWeatherQueryHandler : IRequestHandler<GetWeatherQuery, Result<List<GetWeatherResponse>>>
 {
-    private static readonly string[] Summaries = 
+    private readonly string[] Summaries = 
     {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
@@ -21,7 +21,7 @@ public class GetWeatherQueryHandler : IRequestHandler<GetWeatherQuery, Result<Li
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
             .ToList();
-
+        
         var result = await Task.FromResult(response);
         return Result.Success(result);
     }

@@ -16,10 +16,8 @@ public class WeatherForecastController : ControllerBase
     public async Task<IActionResult> Get()
     {
         var query = new GetWeatherQuery();
-
+        
         var result = await _mediator.Send(query);
-        return result.IsFailure ? 
-            BadRequest(result.Error) : 
-            Ok(result.Value);
+        return result.IsFailure ? BadRequest(result.Error) : Ok(result.Value);
     }
 }

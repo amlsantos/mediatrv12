@@ -1,3 +1,8 @@
+using System.Reflection;
+using Application.Behaviours;
+using MediatR;
+using MediatR.Extensions.FluentValidation.AspNetCore;
+
 namespace Api;
 
 internal static class Program
@@ -20,8 +25,18 @@ internal static class Program
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+        
+        AddMediatR(services);
+    }
 
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+    private static void AddMediatR(IServiceCollection services)
+    {
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
+
+        var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+
+        services.AddMediatR(assemblies);
+        services.AddFluentValidation(assemblies);
     }
 
     private static void Configure(WebApplication app)
