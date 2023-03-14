@@ -33,8 +33,10 @@ internal static class Program
     {
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
 
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
-        services.AddFluentValidation(AppDomain.CurrentDomain.GetAssemblies());
+        var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+        
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(assemblies));
+        services.AddFluentValidation(assemblies);
     }
 
     private static void Configure(WebApplication app)
