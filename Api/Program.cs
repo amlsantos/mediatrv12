@@ -1,4 +1,4 @@
-using System.Reflection;
+using Api.Middlewares;
 using Application.Behaviours;
 using MediatR;
 using MediatR.Extensions.FluentValidation.AspNetCore;
@@ -33,10 +33,8 @@ internal static class Program
     {
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
 
-        var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-
-        services.AddMediatR(assemblies);
-        services.AddFluentValidation(assemblies);
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+        services.AddFluentValidation(AppDomain.CurrentDomain.GetAssemblies());
     }
 
     private static void Configure(WebApplication app)
@@ -51,5 +49,7 @@ internal static class Program
         app.UseHttpsRedirection();
         app.UseAuthorization();
         app.MapControllers();
+        
+        app.UseMiddleware<ExceptionMiddleware>();
     }
 }

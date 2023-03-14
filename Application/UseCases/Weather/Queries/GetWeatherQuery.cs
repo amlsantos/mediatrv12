@@ -3,7 +3,10 @@ using MediatR;
 
 namespace Application.UseCases.Weather.Queries;
 
-public record GetWeatherQuery : IRequest<Result<List<GetWeatherResponse>>>;
+public record GetWeatherQuery : IRequest<Result<List<GetWeatherResponse>>>
+{
+    public string City { get; set; }
+}
 
 public class GetWeatherQueryHandler : IRequestHandler<GetWeatherQuery, Result<List<GetWeatherResponse>>>
 {
